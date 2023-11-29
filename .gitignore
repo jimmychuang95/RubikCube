@@ -1,0 +1,11 @@
+# 忽略所有檔案和資料夾
+*
+
+# 但不忽略.gitignore檔案本身，以確保其變更能夠被追蹤
+!.gitignore
+
+# 允許特定資料夾
+!shaders/
+!include/
+!src/
+
