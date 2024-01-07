@@ -167,9 +167,9 @@ public:
 			glm::vec3(0.0f,0.0f,0.0f),			//Negro
 			glm::vec3(1.0f,1.0f,1.0f),			//Blanco
 			glm::vec3(1.0f,0.5f,0.0f),			//Naranja  
-			glm::vec3(0.8f,0.15f,1.0f),			//Morado  
+			glm::vec3(1.0f,0.9f,0.0f),			//yellow!!  
 			glm::vec3(1.0f,0.025f,0.25f),			//Rojo
-			glm::vec3(0.224f,1.0f,0.078f),			//Verde 
+			glm::vec3(0.18f,0.545f,0.34f),			//Verde 
 			glm::vec3(0.15f,0.35f,1.0f)			//Azul
 		};
 		int assignColor[][6] = {

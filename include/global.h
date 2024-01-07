@@ -125,7 +125,7 @@ void manager() {
     while (!glfwWindowShouldClose(window))
     {
         cam.updateFrame();
-        glClearColor(0.8f, 0.8f, 1.0f, 1.0f);
+        glClearColor(1.0f, 0.8f, 0.8f, 1.0f);
         ourShader.use();
 
         glm::mat4 projection = glm::perspective(glm::radians(cam.fov), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
@@ -261,7 +261,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
             solving = true;
         }
         if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS) {
-            breath = true;
+            //breath = true;
         }
     }
 
@@ -286,12 +286,12 @@ void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
         cam.firstMouse = false;
     }
 
-    float xoffset = xpos - cam.lastX;
-    float yoffset = cam.lastY - ypos; // reversed since y-coordinates go from bottom to top
+    float xoffset = cam.lastX - xpos;
+    float yoffset = ypos - cam.lastY; // reversed since y-coordinates go from bottom to top
     cam.lastX = xpos;
     cam.lastY = ypos;
 
-    float sensitivity = 0.1f; // change this value to your liking
+    float sensitivity = 0.01f; // change this value to your liking
     xoffset *= sensitivity;
     yoffset *= sensitivity;
 
@@ -302,6 +302,7 @@ void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
     if (yoffset > 0 && cam.cameraPos.y < 5) cam.cameraPos.y += yoffset;
     else if (yoffset < 0 && cam.cameraPos.y > -5) cam.cameraPos.y += yoffset;
 
+
     cam.yaw += xoffset;
     cam.pitch += yoffset;
 
@@ -309,6 +310,7 @@ void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
         cam.pitch = 89.0f;
     if (cam.pitch < -89.0f)
         cam.pitch = -89.0f;
+
 
     glm::vec3 front;
     front.x = cos(glm::radians(cam.yaw)) * cos(glm::radians(cam.pitch));
