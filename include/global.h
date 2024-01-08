@@ -117,10 +117,6 @@ void manager() {
 
     Rubik rubik(window, &ourShader, 0.2f);
 
-    //Rubik newRubiks[4] = { Rubik(window, &ourShader, 0.05f),Rubik(window, &ourShader, 0.05f) ,Rubik(window, &ourShader, 0.05f) ,Rubik(window, &ourShader, 0.05f) };
-    //Rubik* rubik2=nullptr;
-    //int numRubik = 0; 
-
 
     while (!glfwWindowShouldClose(window))
     {

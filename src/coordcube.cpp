@@ -23,22 +23,22 @@ signed char Slice_Flip_Prun[N_SLICE1 * N_FLIP / 2] = {0};
 
 int PRUNING_INITED = 0;
 
-void move(coordcube_t* coordcube, int m, const char *cache_dir)
-{
-    if (PRUNING_INITED == 0) {
-        initPruning(cache_dir);
-    }
-    coordcube->twist = twistMove[coordcube->twist][m];
-    coordcube->flip = flipMove[coordcube->flip][m];
-    coordcube->parity = parityMove[coordcube->parity][m];
-    coordcube->FRtoBR = FRtoBR_Move[coordcube->FRtoBR][m];
-    coordcube->URFtoDLF = URFtoDLF_Move[coordcube->URFtoDLF][m];
-    coordcube->URtoUL = URtoUL_Move[coordcube->URtoUL][m];
-    coordcube->UBtoDF = UBtoDF_Move[coordcube->UBtoDF][m];
-    if (coordcube->URtoUL < 336 && coordcube->UBtoDF < 336)// updated only if UR,UF,UL,UB,DR,DF
-        // are not in UD-slice
-        coordcube->URtoDF = MergeURtoULandUBtoDF[coordcube->URtoUL][coordcube->UBtoDF];
-}
+//void move(coordcube_t* coordcube, int m, const char *cache_dir)
+//{
+//    if (PRUNING_INITED == 0) {
+//        initPruning(cache_dir);
+//    }
+//    coordcube->twist = twistMove[coordcube->twist][m];
+//    coordcube->flip = flipMove[coordcube->flip][m];
+//    coordcube->parity = parityMove[coordcube->parity][m];
+//    coordcube->FRtoBR = FRtoBR_Move[coordcube->FRtoBR][m];
+//    coordcube->URFtoDLF = URFtoDLF_Move[coordcube->URFtoDLF][m];
+//    coordcube->URtoUL = URtoUL_Move[coordcube->URtoUL][m];
+//    coordcube->UBtoDF = UBtoDF_Move[coordcube->UBtoDF][m];
+//    if (coordcube->URtoUL < 336 && coordcube->UBtoDF < 336)// updated only if UR,UF,UL,UB,DR,DF
+//        // are not in UD-slice
+//        coordcube->URtoDF = MergeURtoULandUBtoDF[coordcube->URtoUL][coordcube->UBtoDF];
+//}
 
 coordcube_t* get_coordcube(cubiecube_t* cubiecube)
 {
