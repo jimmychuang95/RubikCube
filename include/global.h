@@ -33,7 +33,7 @@ char sideMove;
 bool isMoving = false;
 bool changeDirection = false;
 bool solving = false;
-bool breath = false;
+//bool breath = false;
 bool rubiks = false;
 bool rotar = false;
 //----------------------------------------
@@ -117,9 +117,9 @@ void manager() {
 
     Rubik rubik(window, &ourShader, 0.2f);
 
-    Rubik newRubiks[4] = { Rubik(window, &ourShader, 0.05f),Rubik(window, &ourShader, 0.05f) ,Rubik(window, &ourShader, 0.05f) ,Rubik(window, &ourShader, 0.05f) };
-    Rubik* rubik2=nullptr;
-    int numRubik = 0; 
+    //Rubik newRubiks[4] = { Rubik(window, &ourShader, 0.05f),Rubik(window, &ourShader, 0.05f) ,Rubik(window, &ourShader, 0.05f) ,Rubik(window, &ourShader, 0.05f) };
+    //Rubik* rubik2=nullptr;
+    //int numRubik = 0; 
 
 
     while (!glfwWindowShouldClose(window))
@@ -137,63 +137,21 @@ void manager() {
         if (solving == true) {
             Rubik* rubikMoving = &rubik;
             Rubik* rubikStatic = nullptr;
-            if (rubiks) {
-                rubikMoving = rubik2;
-                rubikStatic = &rubik;
-            }
             rubikMoving->setSolve();
             
             solving = false;
-            if (rubikStatic) {
-                rubikMoving->vibrate();
-                rubikStatic->magnet();
-                rubiks = false;
-            }
         }
 
-        else if (breath) {
-            rubik.expand();
-            breath = false;
-            rubik2 = &newRubiks[numRubik];
-            numRubik++;
-            rubik2->brothers = rubik.brothers;
-            rubik2->brothers.push_back(&rubik);
-            rubik.brothers.push_back(rubik2);
-            rubiks = true;
-            rotar = true;
-        }
-        else if (rotar) {
-            if (isMoving == false && changeDirection) {
-                changeDirection = false;
-                rubik2->degrees *= -1;
-            }
-            if (isMoving) {
-                rubik2->fillShuffle(sideMove);
-                rubik2->move(sideMove);
-                isMoving = false;
-                for (int i = 0; rubik2->degrees == 1.0f && i < 2; i++) {
-                    rubik2->updateParts(sideMove);
-                }
-                rubik2->updateParts(sideMove);
-            }
-            rubik2->twist();
-            rubik2->timesTwist++;
-            if (rubik2->timesTwist == 40) rotar = false;
-        }
 
         else if (isMoving == false && changeDirection) {
             changeDirection = false;
-            if (rubiks) rubik2->degrees *= -1;
-            else rubik.degrees *= -1;
+            rubik.degrees *= -1;
         }
 
         else if (isMoving == true) {
             Rubik* rubikMoving = &rubik;
             Rubik* rubikStatic = nullptr;
-            if (rubiks) {
-                rubikMoving = rubik2;
-                rubikStatic = &rubik;
-            }
+
             rubikMoving->fillShuffle(sideMove);
             rubikMoving->move(sideMove);
             isMoving = false;
@@ -208,11 +166,6 @@ void manager() {
 
     }
     rubik.deleteBuffers();
-    //rubik2.deleteBuffers();
-    for (int i = 0; i < 4; i++)
-    {
-        newRubiks[i].deleteBuffers();
-    }
     glfwTerminate();
 }
 
@@ -223,14 +176,14 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     float cameraSpeed = 0.2;
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
         cam.cameraPos += cameraSpeed * cam.cameraFront;
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS)
         cam.cameraPos -= cameraSpeed * cam.cameraFront;
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
         cam.cameraPos -= glm::normalize(glm::cross(cam.cameraFront, cam.cameraUp)) * cameraSpeed;
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         cam.cameraPos += glm::normalize(glm::cross(cam.cameraFront, cam.cameraUp)) * cameraSpeed;
     if (!isMoving) {
-        if (glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT) == GLFW_PRESS) {
+        if (glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS) {
             changeDirection = true;
         }
         if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {

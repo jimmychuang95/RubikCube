@@ -119,41 +119,6 @@ void Cubito::move(glm::vec3 pivot, Shader* ourShader, float degrees) {
 	return;
 }
 
-void Cubito::breath(bool inhala) {
-	float growth;
-	glm::vec3 v = center;
-	if (inhala) v /= 1500;
-	else v /= -1500;
-	glm::mat4 transform(1.0f);
-	transform = glm::translate(transform, v);
-
-	center = transform * glm::vec4(center, 1.0f);
-
-
-	glm::vec4 vertex;
-	glm::mat4 scaleMatrix = glm::mat4(1.0f);
-	for (int k = 0; k < vertices.size(); k++)
-	{
-		vertex = glm::vec4(vertices[k].x, vertices[k].y, vertices[k].z, 1.0f);
-
-		growth = v.x;
-		if (inhala) {
-			growth = 0.0005;
-		}
-		else {
-			growth = -0.0005;
-		}
-		vertex = glm::scale(scaleMatrix, glm::vec3(1.0f + growth, 1.0f + growth, 1.0f + growth)) * vertex;
-
-		vertices[k].x = vertex.x;
-		vertices[k].y = vertex.y;
-		vertices[k].z = vertex.z;
-	}
-	updateBuffers();
-
-	return;
-}
-
 void Cubito::panting(bool inhala, float growth, int range, int speed) {
 	glm::vec3 v = center;
 	if (inhala) v /= range + speed;
@@ -176,19 +141,6 @@ void Cubito::panting(bool inhala, float growth, int range, int speed) {
 		vertices[k].y = vertex.y;
 		vertices[k].z = vertex.z;
 	}
-	updateBuffers();
-
-	return;
-}
-
-void Cubito::expand() {
-	glm::vec3 v = center;
-	v /= 100;
-	glm::mat4 transform(1.0f);
-	transform = glm::translate(transform, v);
-
-	center = transform * glm::vec4(center, 1.0f);
-
 	updateBuffers();
 
 	return;
@@ -268,15 +220,6 @@ void Cubito::rotateInTheFloor(Shader* shader, int distance, float randDirection 
 	move_vertices(pivot, 2.0f);
 
 	shader->setMat4("model", model);
-
-	return;
-}
-
-void Cubito::vibrate(float magnitude) {
-	glm::vec3 v = glm::vec3(magnitude, magnitude, magnitude);
-	glm::mat4 transform(1.0f);
-	transform = glm::translate(transform, v);
-	center = transform * glm::vec4(center, 1.0f);
 
 	return;
 }
@@ -464,90 +407,6 @@ void Rubik::setSolve() {
 	return;
 }
 
-void Rubik::breath() {
-	for (int j = 0; j < 4000; j++) {
-		if (j != 0 && j % 1000 == 0) {
-			if (inhala) inhala = false;
-			else inhala = true;
-		}
-		for (int i = 0; i < cubitos.size(); i++) {
-			cubitos[i].breath(inhala);
-	    }
-		draw();
-	}
-	inhala = true;
-
-	return;
-}
-
-void Rubik::expand() {
-	float growth = 0.0007;
-	int range = 1000;
-	int steps = 0;
-	int speed = 200;
-	glm::vec3 v;
-
-	for (int i = range; i > 0; i -= speed) {
-		steps += i * 2;
-	}
-
-	int count = 0;
-	int turn = 0;
-	for (int j = 0; j < steps; j++) {
-		if (count != 0 && count == range) {
-			if (inhala) {
-				inhala = false;
-			}
-			else {
-				inhala = true;
-				range -= speed;
-				growth *= 1.2;
-				turn += 1;
-			}
-			count = 0;
-			growth *= -1;
-		}
-		count += 1;
-		for (int i = 0; i < cubitos.size(); i++) {
-			cubitos[i].panting(inhala,growth,range,speed);
-		}
-		draw();
-	}
-
-	inhala = true;
-	growth *= -1;
-	count = 0;
-	for (int i = 0; i < 5;) {
-		if (count != 0 && count == range) {
-			if (inhala) {
-				inhala = false;
-			}
-			else {
-				inhala = true;
-				i += 1;
-				if (range >= 50 * 2) range -= 50;
-			}
-			count = 0;
-			growth *= -1;
-		}
-		count += 1;
-		for (int i = 0; i < cubitos.size(); i++) {
-			cubitos[i].panting(inhala, growth, range, speed);
-		}
-		draw();
-	}
-	inhala = true;
-
-	for (int j = 0; j < 150; j++) {
-		for (int i = 0; i < cubitos.size(); i++) {
-			cubitos[i].expand();
-		}
-		draw();
-	}
-
-	return;
-}
-
 void Rubik::twist() {
 	int idx_pivots[6] = { 4,21,12,13,16,10 };
 	glm::vec3 randomPivot = cubitos[idx_pivots[rand() % 6]].center;
@@ -647,46 +506,6 @@ void Rubik::fall() {
 	return;
 }
 
-void Rubik::vibrate() {
-	float magnitude = 0.05f;
-	for (int i = 0; i < 1000; i++) {
-		for (int j = 0; j < cubitos.size(); j++) {
-			cubitos[j].vibrate(magnitude);
-		}
-		draw();
-		for (int j = 0; j < cubitos.size(); j++) {
-			cubitos[j].vibrate(-magnitude);
-		}
-		draw();
-	}
-	fall();
-
-	return;
-}
-
-void Rubik::magnet() {
-	glm::vec3 vAttract;
-	float magnitude = 0.07f;
-	for (int i = 0; i < cubitos.size(); i++) {
-		for (int j = 0; j < 70; j++) {
-			cubitos[i].vibrate(magnitude);
-			draw();
-			cubitos[i].vibrate(-magnitude);
-			draw();
-		}
-		for (int times = 0; times < 150; times++) {
-			vAttract = cubitos[i].center;
-			vAttract /= -100;
-			glm::mat4 transform(1.0f);
-			transform = glm::translate(transform, vAttract);
-			cubitos[i].center = transform * glm::vec4(cubitos[i].center, 1.0f);
-
-			draw();
-		}
-	}
-
-	return;
-}
 
 void Rubik::deleteBuffers() {
 	for (int i = 0; i < cubitos.size(); i++)
