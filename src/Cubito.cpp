@@ -349,11 +349,15 @@ void Rubik::move(char sideMove) {
 
 	vector<int>* pv = &(parts.find(sideMove)->second);
 	vector<bool> moviendo(8, false);
+
+	glm::vec3 center = (cubitos[(*pv)[3]].center + cubitos[(*pv)[0]].center) / 2.0f; // put center out of forloop
+
 	for (int k = 0; k < 90; k++) {
 
 		glm::vec3 center = (cubitos[(*pv)[3]].center + cubitos[(*pv)[0]].center) / 2.0f;
 
 		for (int j = 0; j < pv->size(); j++) {
+
 			cubitos[(*pv)[j]].move(center, shader, degrees);
 
 			//cubitos[(*pv)[j]].draw(ourShader,cubitos[(*pv)[4]].center);      //Pivot
