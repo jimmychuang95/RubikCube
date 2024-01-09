@@ -232,7 +232,7 @@ void Cubito::deleteBuffers() {
 }
 
 
-void Rubik::genBuffers() {
+void kRubik::genBuffers() {
 	for (int i = 0; i < cubitos.size(); i++){
 		cubitos[i].genBuffers();
 	}
@@ -240,7 +240,7 @@ void Rubik::genBuffers() {
 	return;
 }
 
-void Rubik::load_create_texture() {
+void kRubik::load_create_texture() {
 	for (int i = 0; i < cubitos.size(); i++) {
 		cubitos[i].load_create_texture(shader);
 	}
@@ -248,7 +248,7 @@ void Rubik::load_create_texture() {
 	return;
 }
 
-void Rubik::draw() {			
+void kRubik::draw() {			
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	for (int i = 0; i < cubitos.size(); i++)
 	{
@@ -269,7 +269,7 @@ void Rubik::draw() {
 	return;
 }
 
-void Rubik::updateCurrentPart(char p) {             //Actualizamos las posiciones de los cubitos de la capa actual
+void kRubik::updateCurrentPart(char p) {             //Actualizamos las posiciones de los cubitos de la capa actual
 	vector<int>* pv = &(parts.find(p)->second);
 	vector<int> temp = (*pv);
 //here
@@ -281,7 +281,7 @@ void Rubik::updateCurrentPart(char p) {             //Actualizamos las posicione
 	return;
 }
 
-void Rubik::updateParts(char movedChoosen) {
+void kRubik::updateParts(char movedChoosen) {
 
 	vector<int>* pMoved = &(parts.find(movedChoosen)->second); // Side moved
 	vector<char> updateSides; // Sides to update R,D,L,U,F,B
@@ -330,7 +330,7 @@ void Rubik::updateParts(char movedChoosen) {
 	return;
 }
 
-void Rubik::fillShuffle(char sideMove) {
+void kRubik::fillShuffle(char sideMove) {
 	if (degrees == -1) {
 		shuffle.push_back(string(1, sideMove));
 		cout << sideMove << " ";
@@ -345,7 +345,7 @@ void Rubik::fillShuffle(char sideMove) {
 	return;
 }
 
-void Rubik::move(char sideMove) {
+void kRubik::move(char sideMove) {
 
 	vector<int>* pv = &(parts.find(sideMove)->second);
 	vector<bool> moviendo(8, false);
@@ -371,7 +371,7 @@ void Rubik::move(char sideMove) {
 	return;
 }
 
-void Rubik::solve(vector<string> sol) {
+void kRubik::solve(vector<string> sol) {
 	solution = sol;
 	char sideMoved;
 	degrees = -1.0f;
@@ -409,7 +409,7 @@ void Rubik::solve(vector<string> sol) {
 	return;
 }
 
-void Rubik::setSolve() {
+void kRubik::setSolve() {
 	vector<string> move = get_solution(to_cube_not(shuffle));
 	cout << "\nSOLUTION: ";
 	for (int i = 0; i < move.size(); i++) cout << move[i] << " ";
@@ -420,7 +420,7 @@ void Rubik::setSolve() {
 	return;
 }
 
-void Rubik::twist() {
+void kRubik::twist() {
 	int idx_pivots[6] = { 4,21,12,13,16,10 };
 	glm::vec3 randomPivot = cubitos[idx_pivots[rand() % 6]].center;
 	float growth = 0.0005;
@@ -435,7 +435,7 @@ void Rubik::twist() {
 }
 
 
-void Rubik::deleteBuffers() {
+void kRubik::deleteBuffers() {
 	for (int i = 0; i < cubitos.size(); i++)
 	{
 		cubitos[i].deleteBuffers();

@@ -107,7 +107,7 @@ private:
 	void move_vertices(glm::vec3, float);
 };
 
-class Rubik {
+class kRubik {
 	GLFWwindow* window;
 	Shader* shader;
 	vector<Cubito> cubitos;
@@ -117,12 +117,12 @@ class Rubik {
 
 public:
 	bool drawing = true;
-	vector<Rubik*> brothers;
+	vector<kRubik*> brothers;
 	int timesTwist;
 	vector<string> shuffle;
 	vector<string> solution;
 	float degrees;
-	Rubik(GLFWwindow* _window, Shader* _shader, float _dim = 0.2f) {
+	kRubik(GLFWwindow* _window, Shader* _shader, float _dim = 0.2f) {
 		window = _window;
 		shader = _shader;
 		timesTwist = 0;
