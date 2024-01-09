@@ -36,7 +36,7 @@ bool solving = false;
 //bool breath = false;
 bool rubiks = false;
 bool rotar = false;
-int cubitoMode = 3;
+int rubikMode = 3;
 //----------------------------------------
 
 
@@ -116,18 +116,19 @@ void manager() {
 
     menu();
 
-    if (cubitoMode == 3) {
-        Rubik rubik(window, &ourShader, 0.2f);
-    }
-    else{
-        kRubik rubik(window, &ourShader, 0.2f);
-    }
-       
-   
 
+    Rubik rubik(window, &ourShader, 0.2f);
+
+    kRubik krubik(window, &ourShader, 0.2f);
 
     while (!glfwWindowShouldClose(window))
     {
+      if (rubikMode == 3) {
+        krubik.deleteBuffers();
+      }
+      else {
+        rubik.deleteBuffers();
+      }
         cam.updateFrame();
         glClearColor(1.0f, 0.8f, 0.8f, 1.0f);
         ourShader.use();
@@ -178,9 +179,9 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
     float cameraSpeed = 0.2;
     if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS)
-        cubitoMode = 2;
+        rubikMode = 2;
     if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS)
-        cubitoMode = 3;
+        rubikMode = 3;
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
         cam.cameraPos += cameraSpeed * cam.cameraFront;

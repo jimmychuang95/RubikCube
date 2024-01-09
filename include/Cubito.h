@@ -128,18 +128,38 @@ public:
 		timesTwist = 0;
 		dim = _dim;
 		degrees = -1.0f;
-		float pos = dim + (dim / 8); // 正向位置
-		float neg = -1 * pos;        // 負向位置
+		float pos = dim * 2 + (dim / 4);	//Positivo
+		float neg = -1 * (pos);		//Negativo
 		glm::vec3 cubePositions[] = {
-		   glm::vec3(neg,  pos, pos), // 前左上
-		   glm::vec3(pos,  pos, pos), // 前右上
-		   glm::vec3(neg,  neg, pos), // 前左下
-		   glm::vec3(pos,  neg, pos), // 前右下
+			glm::vec3(neg,  pos, pos),				//0Parte frontal
+			glm::vec3(0.0f, pos, pos),				//1
+			glm::vec3(pos,  pos, pos),				//2
+			glm::vec3(neg,  0.0f,pos),				//3
+			glm::vec3(0.0f,  0.0f, pos),			//4
+			glm::vec3(pos,  0.0f,pos),				//5
+			glm::vec3(neg,  neg, pos),				//6
+			glm::vec3(0.0f, neg, pos),				//7
+			glm::vec3(pos,  neg, pos),				//8
 
-		   glm::vec3(neg,  pos, neg), // 背左上
-		   glm::vec3(pos,  pos, neg), // 背右上
-		   glm::vec3(neg,  neg, neg), // 背左下
-		   glm::vec3(pos,  neg, neg)  // 背右下
+			glm::vec3(neg,  pos, 0.0f),				//9
+			glm::vec3(0.0f, pos, 0.0f),				//10
+			glm::vec3(pos,  pos, 0.0f),				//11
+			glm::vec3(neg,  0.0f, 0.0f),			//12
+			glm::vec3(pos,  0.0f, 0.0f),			//13
+			glm::vec3(neg,  neg, 0.0f),				//14
+			glm::vec3(0.0f, neg, 0.0f),				//15
+			glm::vec3(pos,  neg, 0.0f),				//16
+
+
+			glm::vec3(neg,  pos, neg),				//17
+			glm::vec3(0.0f, pos, neg),				//18Parte trasera
+			glm::vec3(pos,  pos, neg),				//19
+			glm::vec3(neg,  0.0f,neg),				//20
+			glm::vec3(0.0f, 0.0f,neg),				//21
+			glm::vec3(pos,  0.0f,neg),				//22
+			glm::vec3(neg,  neg, neg),				//23
+			glm::vec3(0.0f, neg, neg),				//24
+			glm::vec3(pos,  neg, neg)				//25
 		};
 
 
@@ -153,27 +173,42 @@ public:
 			glm::vec3(0.15f,0.35f,1.0f)			//Azul
 		};
 		int assignColor[][6] = {
-			// 前面的四個小方塊
-			{4, 1, 5, 0, 0, 0}, // 前左上（白色）
-			{4, 1, 0, 0, 6, 0}, // 前右上（白色, 右面藍色）
-			{4, 0, 5, 3, 0, 0}, // 前左下（白色, 下面紅色）
-			{4, 0, 0, 3, 6, 0}, // 前右下（白色, 下面紅色, 右面藍色）
-
-			// 背面的四個小方塊
-			{0, 1, 5, 0, 0, 2}, // 背左上（背面橙色）
-			{0, 1, 0, 0, 6, 2}, // 背右上（背面橙色, 右面藍色）
-			{0, 0, 5, 3, 0, 2}, // 背左下（背面橙色, 下面紅色）
-			{0, 0, 0, 3, 6, 2}  // 背右下（背面橙色, 下面紅色, 右面藍色）
+			{4,1,5,0,0,0},	//Frontal
+			{4,1,0,0,0,0},
+			{4,1,0,0,6,0},
+			{4,0,5,0,0,0},
+			{4,0,0,0,0,0},
+			{4,0,0,0,6,0},
+			{4,0,5,3,0,0},
+			{4,0,0,3,0,0},
+			{4,0,0,3,6,0},
+			{0,1,5,0,0,0},	//Medio
+			{0,1,0,0,0,0},
+			{0,1,0,0,6,0},
+			{0,0,5,0,0,0},
+			{0,0,0,0,6,0},
+			{0,0,5,3,0,0},
+			{0,0,0,3,0,0},
+			{0,0,0,3,6,0},
+			{0,1,5,0,0,2}, //Trasera
+			{0,1,0,0,0,2},
+			{0,1,0,0,6,2},
+			{0,0,5,0,0,2},
+			{0,0,0,0,0,2},
+			{0,0,0,0,6,2},
+			{0,0,5,3,0,2},
+			{0,0,0,3,0,2},
+			{0,0,0,3,6,2}
 		};
+		parts.insert({ 'F', vector<int>{0,1,2,3,4,5,6,7,8} });
+		parts.insert({ 'B', vector<int>{19,18,17,22,21,20,25,24,23} });
+		parts.insert({ 'L', vector<int>{17,9,0,20,12,3,23,14,6} });
+		parts.insert({ 'R', vector<int>{2,11,19,5,13,22,8,16,25} });
+		parts.insert({ 'U', vector<int>{17,18,19,9,10,11,0,1,2} });
+		parts.insert({ 'D', vector<int>{6,7,8,14,15,16,23,24,25} });
 
-		parts.insert({ 'F', vector<int>{0, 1, 2, 3} }); // 前面的小方塊
-		parts.insert({ 'B', vector<int>{5, 4, 7, 6} }); // 背面的小方塊
-		parts.insert({ 'L', vector<int>{4, 0, 6, 2} }); // 左面的小方塊
-		parts.insert({ 'R', vector<int>{1, 5, 3, 7} }); // 右面的小方塊
-		parts.insert({ 'U', vector<int>{4, 5, 0, 1} }); // 上面的小方塊
-		parts.insert({ 'D', vector<int>{2, 3, 6, 7} }); // 下面的小方塊
 		vector<glm::vec3> cubeColor;
-		for (int i = 0; i < 8; i++) {
+		for (int i = 0; i < 26; i++) {
 			for (int j = 0; j < 6; j++) {
 				cubeColor.push_back(colors[assignColor[i][j]]);
 			}
@@ -200,6 +235,7 @@ public:
 private:
 	void genBuffers();
 	void load_create_texture();
+	void fall();
 };
 
 class kRubik {
