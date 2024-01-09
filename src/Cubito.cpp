@@ -272,55 +272,57 @@ void Rubik::draw() {
 void Rubik::updateCurrentPart(char p) {             //Actualizamos las posiciones de los cubitos de la capa actual
 	vector<int>* pv = &(parts.find(p)->second);
 	vector<int> temp = (*pv);
-
-	for (int i = 0; i < 3; i++) {
-		(*pv)[i] = temp[6 - (i * 3)];                  //0,1,2
-		(*pv)[i + 3] = temp[10 - ((i + 1) * 3)];     //3,4,5
-		(*pv)[i + 6] = temp[i + 12 - ((i + 1) * 4)];   //6,7,8
-	}
+//here
+	(*pv)[1] = temp[0];
+	(*pv)[3] = temp[1];
+	(*pv)[0] = temp[2];
+	(*pv)[2] = temp[3];
 
 	return;
 }
 
-void Rubik::updateParts(char movedChoosen) {  //Sides
-	vector<int>* pMoved = &(parts.find(movedChoosen)->second);         //Side moved
-	vector<char> updateSides;   //Sides to update R,D,L,U,F,B
-	vector<vector<int>> updateIndex; //Index to update divided in parts of a side
-	switch (movedChoosen)
-	{
+void Rubik::updateParts(char movedChoosen) {
+
+	vector<int>* pMoved = &(parts.find(movedChoosen)->second); // Side moved
+	vector<char> updateSides; // Sides to update R,D,L,U,F,B
+	vector<vector<int>> updateIndex; // Index to update divided in parts of a side
+
+	switch (movedChoosen) {
 	case 'F':
-		updateSides = vector<char>{ 'U','R','D','L' };
-		updateIndex = vector<vector<int>>{ {6,7,8}, {0,3,6}, {0,1,2}, {2,5,8} };
+		updateSides = vector<char>{ 'U', 'R', 'D', 'L' };
+		updateIndex = vector<vector<int>>{ {1, 3}, {0, 3}, {0, 2}, {0, 1} };
 		break;
 	case 'B':
-		updateSides = vector<char>{ 'U','L','D','R' };       //Actualizar desde B
-		updateIndex = vector<vector<int>>{ {2,1,0}, {0,3,6}, {8,7,6}, {2,5,8} };
+		updateSides = vector<char>{ 'U', 'L', 'D', 'R' };
+		updateIndex = vector<vector<int>>{ {0, 2}, {0, 3}, {1, 3}, {1, 2} };
 		break;
 	case 'L':
-		updateSides = vector<char>{ 'U','F','D','B' };
-		updateIndex = vector<vector<int>>{ {0,3,6}, {0,3,6}, {6,3,0}, {2,5,8} };
+		updateSides = vector<char>{ 'U', 'F', 'D', 'B' };
+		updateIndex = vector<vector<int>>{ {0, 1}, {0, 1}, {0, 1}, {0, 1} };
 		break;
 	case 'R':
-		updateSides = vector<char>{ 'U','B','D','F' };
-		updateIndex = vector<vector<int>>{ {8,5,2}, {0,3,6}, {2,5,8}, {2,5,8} };
+		updateSides = vector<char>{ 'U', 'B', 'D', 'F' };
+		updateIndex = vector<vector<int>>{ {2, 3}, {2, 3}, {2, 3}, {2, 3} };
 		break;
 	case 'D':
-		updateSides = vector<char>{ 'F','R','B','L' };
-		updateIndex = vector<vector<int>>{ {6,7,8}, {6,7,8}, {8,7,6}, {8,7,6} };
+		updateSides = vector<char>{ 'F', 'R', 'B', 'L' };
+		updateIndex = vector<vector<int>>{ {2, 3}, {2, 3}, {0, 1}, {0, 1} };
 		break;
 	case 'U':
-		updateSides = vector<char>{ 'B','R','F','L' };
-		updateIndex = vector<vector<int>>{ {2,1,0}, {2,1,0}, {0,1,2}, {0,1,2} };
+		updateSides = vector<char>{ 'B', 'R', 'F', 'L' };
+		updateIndex = vector<vector<int>>{ {0, 1}, {0, 1}, {2, 3}, {2, 3} };
 		break;
 	default:
 		break;
 	}
+
 	updateCurrentPart(movedChoosen);
-	vector<vector<int>> sortedIndex = { {0,1,2},{2,5,8},{6,7,8},{0,3,6} }; //Orden de los indices que actualizaremos
-	vector<int>* side_updating;          //Side updating
+	vector<vector<int>> sortedIndex = { {0, 1}, {2, 3}, {2, 3}, {0, 1} }; // Order of indices to be updated
+	vector<int>* side_updating; // Side updating
+
 	for (int i = 0; i < 4; i++) {
 		side_updating = &(parts.find(updateSides[i])->second);
-		for (int j = 0; j < 3; j++) {
+		for (int j = 0; j < 2; j++) {
 			(*side_updating)[updateIndex[i][j]] = (*pMoved)[sortedIndex[i][j]];
 		}
 	}
@@ -344,14 +346,20 @@ void Rubik::fillShuffle(char sideMove) {
 }
 
 void Rubik::move(char sideMove) {
+
 	vector<int>* pv = &(parts.find(sideMove)->second);
-	vector<bool> moviendo(26, false);
+	vector<bool> moviendo(8, false);
 	for (int k = 0; k < 90; k++) {
 		for (int j = 0; j < pv->size(); j++) {
-			cubitos[(*pv)[j]].move(cubitos[(*pv)[4]].center, shader, degrees);      //[4] es el pivot
+
+			glm::vec3 center = (cubitos[(*pv)[3]].center + cubitos[(*pv)[0]].center) / 2.0f;
+			cubitos[(*pv)[j]].move(center, shader, degrees);
+
 			//cubitos[(*pv)[j]].draw(ourShader,cubitos[(*pv)[4]].center);      //Pivot
 			moviendo[(*pv)[j]] = true;
 		}
+
+
 		draw();
 	}
 

@@ -17,8 +17,8 @@ using namespace std;
 template<class T>
 class Point {
 public:
-	T x, y, z, c1, c2, c3, t1,t2;
-	Point(T _x = 0, T _y = 0, T _z = 0, glm::vec3 color=glm::vec3(0.0f,0.0f,0.0f), T _t1=0, T _t2=3) {
+	T x, y, z, c1, c2, c3, t1, t2;
+	Point(T _x = 0, T _y = 0, T _z = 0, glm::vec3 color = glm::vec3(0.0f, 0.0f, 0.0f), T _t1 = 0, T _t2 = 3) {
 		x = _x;
 		y = _y;
 		z = _z;
@@ -36,75 +36,75 @@ public:
 	float dim;
 	unsigned int VAO, VBO;
 	glm::vec3 center;
-	
+
 	const char* title_texture;
 	unsigned int texture;
 	//glm::mat4 model;
 	float acc = 1.0f;
-	glm::mat4 prevRot=glm::mat4(1.0f);
+	glm::mat4 prevRot = glm::mat4(1.0f);
 
-	Cubito(float _dim,glm::vec3 _pos,vector<glm::vec3> color) {			//Depende del tipo hacemos push a sus vertices
+	Cubito(float _dim, glm::vec3 _pos, vector<glm::vec3> color) {			//Depende del tipo hacemos push a sus vertices
 		title_texture = "../texture/allspark.jpg";
 		dim = _dim;
 		center = _pos;
 		//FRONT
-		vertices.push_back(Point<float>(-dim, -dim, dim,  color[0], 0.0f, 0.0f));
-		vertices.push_back(Point<float>(dim, -dim, dim,   color[0], 1.0f, 0.0f));
-		vertices.push_back(Point<float>(dim, dim, dim,    color[0], 1.0f, 1.0f));
-		vertices.push_back(Point<float>(dim, dim, dim,    color[0], 1.0f, 1.0f));
-		vertices.push_back(Point<float>(-dim, dim, dim,   color[0], 0.0f, 1.0f));
-		vertices.push_back(Point<float>(-dim, -dim, dim,  color[0], 0.0f, 0.0f));
+		vertices.push_back(Point<float>(-dim, -dim, dim, color[0], 0.0f, 0.0f));
+		vertices.push_back(Point<float>(dim, -dim, dim, color[0], 1.0f, 0.0f));
+		vertices.push_back(Point<float>(dim, dim, dim, color[0], 1.0f, 1.0f));
+		vertices.push_back(Point<float>(dim, dim, dim, color[0], 1.0f, 1.0f));
+		vertices.push_back(Point<float>(-dim, dim, dim, color[0], 0.0f, 1.0f));
+		vertices.push_back(Point<float>(-dim, -dim, dim, color[0], 0.0f, 0.0f));
 		//UP
-		vertices.push_back(Point<float>(-dim, dim, -dim,  color[1], 0.0f, 1.0f));
-		vertices.push_back(Point<float>(dim, dim, -dim,   color[1], 1.0f, 1.0f));
-		vertices.push_back(Point<float>(dim, dim, dim,    color[1], 1.0f, 0.0f));
-		vertices.push_back(Point<float>(dim, dim, dim,    color[1], 1.0f, 0.0f));
-		vertices.push_back(Point<float>(-dim, dim, dim,   color[1], 0.0f, 0.0f));
-		vertices.push_back(Point<float>(-dim, dim, -dim,  color[1], 0.0f, 1.0f));
+		vertices.push_back(Point<float>(-dim, dim, -dim, color[1], 0.0f, 1.0f));
+		vertices.push_back(Point<float>(dim, dim, -dim, color[1], 1.0f, 1.0f));
+		vertices.push_back(Point<float>(dim, dim, dim, color[1], 1.0f, 0.0f));
+		vertices.push_back(Point<float>(dim, dim, dim, color[1], 1.0f, 0.0f));
+		vertices.push_back(Point<float>(-dim, dim, dim, color[1], 0.0f, 0.0f));
+		vertices.push_back(Point<float>(-dim, dim, -dim, color[1], 0.0f, 1.0f));
 		//LEFT
-		vertices.push_back(Point<float>(-dim, dim, dim,   color[2], 1.0f, 0.0f));
-		vertices.push_back(Point<float>(-dim, dim, -dim,  color[2], 1.0f, 1.0f));
+		vertices.push_back(Point<float>(-dim, dim, dim, color[2], 1.0f, 0.0f));
+		vertices.push_back(Point<float>(-dim, dim, -dim, color[2], 1.0f, 1.0f));
 		vertices.push_back(Point<float>(-dim, -dim, -dim, color[2], 0.0f, 1.0f));
 		vertices.push_back(Point<float>(-dim, -dim, -dim, color[2], 0.0f, 1.0f));
-		vertices.push_back(Point<float>(-dim, -dim, dim,  color[2], 0.0f, 0.0f));
-		vertices.push_back(Point<float>(-dim, dim, dim,   color[2], 1.0f, 0.0f));
+		vertices.push_back(Point<float>(-dim, -dim, dim, color[2], 0.0f, 0.0f));
+		vertices.push_back(Point<float>(-dim, dim, dim, color[2], 1.0f, 0.0f));
 		//DOWN
 		vertices.push_back(Point<float>(-dim, -dim, -dim, color[3], 0.0f, 1.0f));
-		vertices.push_back(Point<float>(dim, -dim, -dim,  color[3], 1.0f, 1.0f));
-		vertices.push_back(Point<float>(dim, -dim, dim,   color[3], 1.0f, 0.0f));
-		vertices.push_back(Point<float>(dim, -dim, dim,   color[3], 1.0f, 0.0f));
-		vertices.push_back(Point<float>(-dim, -dim, dim,  color[3], 0.0f, 0.0f));
+		vertices.push_back(Point<float>(dim, -dim, -dim, color[3], 1.0f, 1.0f));
+		vertices.push_back(Point<float>(dim, -dim, dim, color[3], 1.0f, 0.0f));
+		vertices.push_back(Point<float>(dim, -dim, dim, color[3], 1.0f, 0.0f));
+		vertices.push_back(Point<float>(-dim, -dim, dim, color[3], 0.0f, 0.0f));
 		vertices.push_back(Point<float>(-dim, -dim, -dim, color[3], 0.0f, 1.0f));
 		//RIGHT
-		vertices.push_back(Point<float>(dim, dim, dim,    color[4], 1.0f, 0.0f));
-		vertices.push_back(Point<float>(dim, dim, -dim,   color[4], 1.0f, 1.0f));
-		vertices.push_back(Point<float>(dim, -dim, -dim,  color[4], 0.0f, 1.0f));
-		vertices.push_back(Point<float>(dim, -dim, -dim,  color[4], 0.0f, 1.0f));
-		vertices.push_back(Point<float>(dim, -dim, dim,   color[4], 0.0f, 0.0f));
-		vertices.push_back(Point<float>(dim, dim, dim,    color[4], 1.0f, 0.0f));
+		vertices.push_back(Point<float>(dim, dim, dim, color[4], 1.0f, 0.0f));
+		vertices.push_back(Point<float>(dim, dim, -dim, color[4], 1.0f, 1.0f));
+		vertices.push_back(Point<float>(dim, -dim, -dim, color[4], 0.0f, 1.0f));
+		vertices.push_back(Point<float>(dim, -dim, -dim, color[4], 0.0f, 1.0f));
+		vertices.push_back(Point<float>(dim, -dim, dim, color[4], 0.0f, 0.0f));
+		vertices.push_back(Point<float>(dim, dim, dim, color[4], 1.0f, 0.0f));
 		//BACK
 		vertices.push_back(Point<float>(-dim, -dim, -dim, color[5], 0.0f, 0.0f));
-		vertices.push_back(Point<float>(dim, -dim, -dim,  color[5], 1.0f, 0.0f));
-		vertices.push_back(Point<float>(dim, dim, -dim,   color[5], 1.0f, 1.0f));
-		vertices.push_back(Point<float>(dim, dim, -dim,   color[5], 1.0f, 1.0f));
-		vertices.push_back(Point<float>(-dim, dim, -dim,  color[5], 0.0f, 1.0f));
+		vertices.push_back(Point<float>(dim, -dim, -dim, color[5], 1.0f, 0.0f));
+		vertices.push_back(Point<float>(dim, dim, -dim, color[5], 1.0f, 1.0f));
+		vertices.push_back(Point<float>(dim, dim, -dim, color[5], 1.0f, 1.0f));
+		vertices.push_back(Point<float>(-dim, dim, -dim, color[5], 0.0f, 1.0f));
 		vertices.push_back(Point<float>(-dim, -dim, -dim, color[5], 0.0f, 0.0f));
 
 	}
 	void genBuffers();
 	void load_create_texture(Shader*);
-	void draw(Shader*,glm::vec3);
-	void move(glm::vec3,Shader*,float);
+	void draw(Shader*, glm::vec3);
+	void move(glm::vec3, Shader*, float);
 	void breath(bool);
-	void panting(bool,float,int,int);
+	void panting(bool, float, int, int);
 	void expand();
 	void twist(Shader*, glm::vec3, float);
-	void rotateInTheFloor(Shader*,int,float);
+	void rotateInTheFloor(Shader*, int, float);
 	void vibrate(float);
 	void deleteBuffers();
 private:
 	void updateBuffers();
-	void move_vertices(glm::vec3,float);
+	void move_vertices(glm::vec3, float);
 };
 
 class Rubik {
@@ -128,41 +128,21 @@ public:
 		timesTwist = 0;
 		dim = _dim;
 		degrees = -1.0f;
-		float pos=dim*2+(dim/4);	//Positivo
-		float neg=-1*(pos);		//Negativo
+		float pos = dim + (dim / 8); // 正向位置
+		float neg = -1 * pos;        // 負向位置
 		glm::vec3 cubePositions[] = {
-			glm::vec3(neg,  pos, pos),				//0Parte frontal
-			glm::vec3(0.0f, pos, pos),				//1
-			glm::vec3(pos,  pos, pos),				//2
-			glm::vec3(neg,  0.0f,pos),				//3
-			glm::vec3(0.0f,  0.0f, pos),			//4
-			glm::vec3(pos,  0.0f,pos),				//5
-			glm::vec3(neg,  neg, pos),				//6
-			glm::vec3(0.0f, neg, pos),				//7
-			glm::vec3(pos,  neg, pos),				//8
+		   glm::vec3(neg,  pos, pos), // 前左上
+		   glm::vec3(pos,  pos, pos), // 前右上
+		   glm::vec3(neg,  neg, pos), // 前左下
+		   glm::vec3(pos,  neg, pos), // 前右下
 
-			glm::vec3(neg,  pos, 0.0f),				//9
-			glm::vec3(0.0f, pos, 0.0f),				//10
-			glm::vec3(pos,  pos, 0.0f),				//11
-			glm::vec3(neg,  0.0f, 0.0f),			//12
-			glm::vec3(pos,  0.0f, 0.0f),			//13
-			glm::vec3(neg,  neg, 0.0f),				//14
-			glm::vec3(0.0f, neg, 0.0f),				//15
-			glm::vec3(pos,  neg, 0.0f),				//16
-
-
-			glm::vec3(neg,  pos, neg),				//17
-			glm::vec3(0.0f, pos, neg),				//18Parte trasera
-			glm::vec3(pos,  pos, neg),				//19
-			glm::vec3(neg,  0.0f,neg),				//20
-			glm::vec3(0.0f, 0.0f,neg),				//21
-			glm::vec3(pos,  0.0f,neg),				//22
-			glm::vec3(neg,  neg, neg),				//23
-			glm::vec3(0.0f, neg, neg),				//24
-			glm::vec3(pos,  neg, neg)				//25
+		   glm::vec3(neg,  pos, neg), // 背左上
+		   glm::vec3(pos,  pos, neg), // 背右上
+		   glm::vec3(neg,  neg, neg), // 背左下
+		   glm::vec3(pos,  neg, neg)  // 背右下
 		};
 
-		
+
 		glm::vec3 colors[] = {
 			glm::vec3(0.0f,0.0f,0.0f),			//Negro
 			glm::vec3(1.0f,1.0f,1.0f),			//Blanco
@@ -173,46 +153,31 @@ public:
 			glm::vec3(0.15f,0.35f,1.0f)			//Azul
 		};
 		int assignColor[][6] = {
-			{4,1,5,0,0,0},	//Frontal
-			{4,1,0,0,0,0},
-			{4,1,0,0,6,0},
-			{4,0,5,0,0,0},
-			{4,0,0,0,0,0},
-			{4,0,0,0,6,0},
-			{4,0,5,3,0,0},
-			{4,0,0,3,0,0},
-			{4,0,0,3,6,0},	
-			{0,1,5,0,0,0},	//Medio
-			{0,1,0,0,0,0},
-			{0,1,0,0,6,0},
-			{0,0,5,0,0,0},
-			{0,0,0,0,6,0},
-			{0,0,5,3,0,0},
-			{0,0,0,3,0,0},
-			{0,0,0,3,6,0},
-			{0,1,5,0,0,2}, //Trasera
-			{0,1,0,0,0,2},
-			{0,1,0,0,6,2},
-			{0,0,5,0,0,2},
-			{0,0,0,0,0,2},
-			{0,0,0,0,6,2},
-			{0,0,5,3,0,2},
-			{0,0,0,3,0,2},
-			{0,0,0,3,6,2}	
-		};
-		parts.insert({'F', vector<int>{0,1,2,3,4,5,6,7,8} });
-		parts.insert({'B', vector<int>{19,18,17,22,21,20,25,24,23}});
-		parts.insert({'L', vector<int>{17,9,0,20,12,3,23,14,6}});
-		parts.insert({'R', vector<int>{2,11,19,5,13,22,8,16,25}});
-		parts.insert({'U', vector<int>{17,18,19,9,10,11,0,1,2}});
-		parts.insert({'D', vector<int>{6,7,8,14,15,16,23,24,25}});
+			// 前面的四個小方塊
+			{4, 1, 5, 0, 0, 0}, // 前左上（白色）
+			{4, 1, 0, 0, 6, 0}, // 前右上（白色, 右面藍色）
+			{4, 0, 5, 3, 0, 0}, // 前左下（白色, 下面紅色）
+			{4, 0, 0, 3, 6, 0}, // 前右下（白色, 下面紅色, 右面藍色）
 
+			// 背面的四個小方塊
+			{0, 1, 5, 0, 0, 2}, // 背左上（背面橙色）
+			{0, 1, 0, 0, 6, 2}, // 背右上（背面橙色, 右面藍色）
+			{0, 0, 5, 3, 0, 2}, // 背左下（背面橙色, 下面紅色）
+			{0, 0, 0, 3, 6, 2}  // 背右下（背面橙色, 下面紅色, 右面藍色）
+		};
+
+		parts.insert({ 'F', vector<int>{0, 1, 2, 3} }); // 前面的小方塊
+		parts.insert({ 'B', vector<int>{4, 5, 6, 7} }); // 背面的小方塊
+		parts.insert({ 'L', vector<int>{0, 4, 2, 6} }); // 左面的小方塊
+		parts.insert({ 'R', vector<int>{1, 5, 3, 7} }); // 右面的小方塊
+		parts.insert({ 'U', vector<int>{1, 0, 5, 4} }); // 上面的小方塊
+		parts.insert({ 'D', vector<int>{2, 3, 6, 7} }); // 下面的小方塊
 		vector<glm::vec3> cubeColor;
-		for(int i=0;i<26;i++){
+		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 6; j++) {
 				cubeColor.push_back(colors[assignColor[i][j]]);
 			}
-			cubitos.push_back(Cubito(dim,cubePositions[i],cubeColor));
+			cubitos.push_back(Cubito(dim, cubePositions[i], cubeColor));
 			cubeColor.clear();
 		}
 

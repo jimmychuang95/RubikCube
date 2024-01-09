@@ -141,7 +141,7 @@ void manager() {
 
         else if (isMoving == false && changeDirection) {
             changeDirection = false;
-            rubik.degrees *= -1;
+            rubik.degrees *= -1; // change direction
         }
 
         else if (isMoving == true) {
