@@ -167,10 +167,10 @@ public:
 		};
 
 		parts.insert({ 'F', vector<int>{0, 1, 2, 3} }); // 前面的小方塊
-		parts.insert({ 'B', vector<int>{4, 5, 6, 7} }); // 背面的小方塊
-		parts.insert({ 'L', vector<int>{0, 4, 2, 6} }); // 左面的小方塊
+		parts.insert({ 'B', vector<int>{5, 4, 7, 6} }); // 背面的小方塊
+		parts.insert({ 'L', vector<int>{4, 0, 6, 2} }); // 左面的小方塊
 		parts.insert({ 'R', vector<int>{1, 5, 3, 7} }); // 右面的小方塊
-		parts.insert({ 'U', vector<int>{1, 0, 5, 4} }); // 上面的小方塊
+		parts.insert({ 'U', vector<int>{4, 5, 0, 1} }); // 上面的小方塊
 		parts.insert({ 'D', vector<int>{2, 3, 6, 7} }); // 下面的小方塊
 		vector<glm::vec3> cubeColor;
 		for (int i = 0; i < 8; i++) {
