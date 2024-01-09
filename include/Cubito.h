@@ -245,6 +245,7 @@ class kRubik {
 	float dim;
 	unordered_map<char, vector<int>>  parts;
 	bool inhala = true;
+	unordered_map<char, glm::vec3> centers;
 
 public:
 	bool drawing = true;
@@ -273,7 +274,7 @@ public:
 		   glm::vec3(pos,  neg, neg)  // ­I¥k¤U
 		};
 
-
+		
 		glm::vec3 colors[] = {
 			glm::vec3(0.0f,0.0f,0.0f),			//Negro
 			glm::vec3(1.0f,1.0f,1.0f),			//Blanco
@@ -311,7 +312,7 @@ public:
 			cubitos.push_back(Cubito(dim, cubePositions[i], cubeColor));
 			cubeColor.clear();
 		}
-
+		getRotateCenters();
 		genBuffers();
 		load_create_texture();
 	}
@@ -328,7 +329,9 @@ public:
 	void vibrate();
 	void magnet();
 	void deleteBuffers();
+	void getRotateCenters();
 private:
 	void genBuffers();
 	void load_create_texture();
+	
 };

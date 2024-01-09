@@ -543,18 +543,24 @@ void kRubik::fillShuffle(char sideMove) {
 	return;
 }
 
+void kRubik::getRotateCenters() {
+	vector<char> sides = { 'F','B','L','R','U','D' };
+	for (int i = 0; i < sides.size(); i++) {
+		glm::vec3 center = (cubitos[parts.find(sides[i])->second[3]].center + cubitos[parts.find(sides[i])->second[0]].center) / 2.0f;
+		centers.insert({ sides[i], center });
+	}
+}
+
 void kRubik::move(char sideMove) {
 
 	vector<int>* pv = &(parts.find(sideMove)->second);
 	vector<bool> moviendo(8, false);
-
-	glm::vec3 center = (cubitos[(*pv)[3]].center + cubitos[(*pv)[0]].center) / 2.0f; // put center out of forloop
+	
+	glm::vec3 center = centers.find(sideMove)->second;
 
 	for (int k = 0; k < 90; k++) {
 
-		glm::vec3 center = (cubitos[(*pv)[3]].center + cubitos[(*pv)[0]].center) / 2.0f;
-
-		for (int j = 0; j < pv->size(); j++) {
+		for (int j = 0; j < 4; j++) {
 
 			cubitos[(*pv)[j]].move(center, shader, degrees);
 

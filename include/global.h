@@ -36,7 +36,8 @@ bool solving = false;
 //bool breath = false;
 bool rubiks = false;
 bool rotar = false;
-int rubikMode = 3;
+int rubikMode = 2;
+bool changeMode = false;
 //----------------------------------------
 
 
@@ -123,11 +124,19 @@ void manager() {
 
     while (!glfwWindowShouldClose(window))
     {
-      if (rubikMode == 3) {
-        krubik.deleteBuffers();
-      }
-      else {
-        rubik.deleteBuffers();
+
+      if (changeMode) {
+        if (rubikMode == 3) {
+          krubik.deleteBuffers();
+          rubik = Rubik(window, &ourShader, 0.2f);
+          changeMode = false;
+        }
+        else {
+          rubik.deleteBuffers();
+          krubik = kRubik(window, &ourShader, 0.2f);
+          changeMode = false;
+        }
+				
       }
         cam.updateFrame();
         glClearColor(1.0f, 0.8f, 0.8f, 1.0f);
@@ -140,32 +149,59 @@ void manager() {
         ourShader.setMat4("view", view);
 
         if (solving == true) {
+
+          if (rubikMode == 3) {
             rubik.setSolve();
-            
+          }
+          else {
+            krubik.setSolve();
+          }
             solving = false;
         }
 
 
         else if (isMoving == false && changeDirection) {
             changeDirection = false;
-            rubik.degrees *= -1; // change direction
+
+            if (rubikMode == 3) {
+              rubik.degrees *= -1; // change direction
+            }
+            else {
+              krubik.degrees *= -1;
+            }
         }
 
         else if (isMoving == true) {
-            Rubik* rubikMoving = &rubik;
-            Rubik* rubikStatic = nullptr;
 
-            rubikMoving->fillShuffle(sideMove);
-            rubikMoving->move(sideMove);
+          if (rubikMode == 3) {
+            rubik.fillShuffle(sideMove);
+            rubik.move(sideMove);
             isMoving = false;
-            for (int i = 0; rubikMoving->degrees == 1.0f && i < 2; i++) {
-                rubikMoving->updateParts(sideMove);
+            for (int i = 0; rubik.degrees == 1.0f && i < 2; i++) {
+              rubik.updateParts(sideMove);
             }
 
-            rubikMoving->updateParts(sideMove);
+            rubik.updateParts(sideMove);
+          }
+          else {
+            krubik.fillShuffle(sideMove);
+						krubik.move(sideMove);
+						isMoving = false;
+            for (int i = 0; krubik.degrees == 1.0f && i < 2; i++) {
+							krubik.updateParts(sideMove);
+						}
+
+						krubik.updateParts(sideMove);
+          }
         }
         else {
+          if (rubikMode == 3) {
             rubik.draw();
+          }
+          else {
+            krubik.draw();
+          }
+            
         }
 
     }
@@ -174,14 +210,20 @@ void manager() {
 }
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+
+  Shader ourShader("../shaders/shader.vs", "../shaders/shader.fs");
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
 
     float cameraSpeed = 0.2;
-    if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS)
-        rubikMode = 2;
-    if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS)
-        rubikMode = 3;
+    if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) {
+      changeMode = true;
+      rubikMode = 2;
+    }
+    if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS) {
+      changeMode = true;
+      rubikMode = 3;
+    }
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
         cam.cameraPos += cameraSpeed * cam.cameraFront;
