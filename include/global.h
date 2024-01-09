@@ -36,6 +36,7 @@ bool solving = false;
 //bool breath = false;
 bool rubiks = false;
 bool rotar = false;
+int cubitoMode = 3;
 //----------------------------------------
 
 
@@ -115,7 +116,14 @@ void manager() {
 
     menu();
 
-    Rubik rubik(window, &ourShader, 0.2f);
+    if (cubitoMode == 3) {
+        Rubik rubik(window, &ourShader, 0.2f);
+    }
+    else{
+        kRubik rubik(window, &ourShader, 0.2f);
+    }
+       
+   
 
 
     while (!glfwWindowShouldClose(window))
@@ -131,9 +139,7 @@ void manager() {
         ourShader.setMat4("view", view);
 
         if (solving == true) {
-            Rubik* rubikMoving = &rubik;
-            Rubik* rubikStatic = nullptr;
-            rubikMoving->setSolve();
+            rubik.setSolve();
             
             solving = false;
         }
@@ -154,6 +160,7 @@ void manager() {
             for (int i = 0; rubikMoving->degrees == 1.0f && i < 2; i++) {
                 rubikMoving->updateParts(sideMove);
             }
+
             rubikMoving->updateParts(sideMove);
         }
         else {
@@ -170,6 +177,11 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         glfwSetWindowShouldClose(window, true);
 
     float cameraSpeed = 0.2;
+    if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS)
+        cubitoMode = 2;
+    if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS)
+        cubitoMode = 3;
+
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
         cam.cameraPos += cameraSpeed * cam.cameraFront;
     if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS)

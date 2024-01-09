@@ -107,6 +107,101 @@ private:
 	void move_vertices(glm::vec3, float);
 };
 
+class Rubik {
+	GLFWwindow* window;
+	Shader* shader;
+	vector<Cubito> cubitos;
+	float dim;
+	unordered_map<char, vector<int>>  parts;
+	bool inhala = true;
+
+public:
+	bool drawing = true;
+	vector<Rubik*> brothers;
+	int timesTwist;
+	vector<string> shuffle;
+	vector<string> solution;
+	float degrees;
+	Rubik(GLFWwindow* _window, Shader* _shader, float _dim = 0.2f) {
+		window = _window;
+		shader = _shader;
+		timesTwist = 0;
+		dim = _dim;
+		degrees = -1.0f;
+		float pos = dim + (dim / 8); // 正向位置
+		float neg = -1 * pos;        // 負向位置
+		glm::vec3 cubePositions[] = {
+		   glm::vec3(neg,  pos, pos), // 前左上
+		   glm::vec3(pos,  pos, pos), // 前右上
+		   glm::vec3(neg,  neg, pos), // 前左下
+		   glm::vec3(pos,  neg, pos), // 前右下
+
+		   glm::vec3(neg,  pos, neg), // 背左上
+		   glm::vec3(pos,  pos, neg), // 背右上
+		   glm::vec3(neg,  neg, neg), // 背左下
+		   glm::vec3(pos,  neg, neg)  // 背右下
+		};
+
+
+		glm::vec3 colors[] = {
+			glm::vec3(0.0f,0.0f,0.0f),			//Negro
+			glm::vec3(1.0f,1.0f,1.0f),			//Blanco
+			glm::vec3(1.0f,0.5f,0.0f),			//Naranja  
+			glm::vec3(1.0f,0.9f,0.0f),			//yellow!!  
+			glm::vec3(1.0f,0.025f,0.25f),			//Rojo
+			glm::vec3(0.18f,0.545f,0.34f),			//Verde 
+			glm::vec3(0.15f,0.35f,1.0f)			//Azul
+		};
+		int assignColor[][6] = {
+			// 前面的四個小方塊
+			{4, 1, 5, 0, 0, 0}, // 前左上（白色）
+			{4, 1, 0, 0, 6, 0}, // 前右上（白色, 右面藍色）
+			{4, 0, 5, 3, 0, 0}, // 前左下（白色, 下面紅色）
+			{4, 0, 0, 3, 6, 0}, // 前右下（白色, 下面紅色, 右面藍色）
+
+			// 背面的四個小方塊
+			{0, 1, 5, 0, 0, 2}, // 背左上（背面橙色）
+			{0, 1, 0, 0, 6, 2}, // 背右上（背面橙色, 右面藍色）
+			{0, 0, 5, 3, 0, 2}, // 背左下（背面橙色, 下面紅色）
+			{0, 0, 0, 3, 6, 2}  // 背右下（背面橙色, 下面紅色, 右面藍色）
+		};
+
+		parts.insert({ 'F', vector<int>{0, 1, 2, 3} }); // 前面的小方塊
+		parts.insert({ 'B', vector<int>{5, 4, 7, 6} }); // 背面的小方塊
+		parts.insert({ 'L', vector<int>{4, 0, 6, 2} }); // 左面的小方塊
+		parts.insert({ 'R', vector<int>{1, 5, 3, 7} }); // 右面的小方塊
+		parts.insert({ 'U', vector<int>{4, 5, 0, 1} }); // 上面的小方塊
+		parts.insert({ 'D', vector<int>{2, 3, 6, 7} }); // 下面的小方塊
+		vector<glm::vec3> cubeColor;
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 6; j++) {
+				cubeColor.push_back(colors[assignColor[i][j]]);
+			}
+			cubitos.push_back(Cubito(dim, cubePositions[i], cubeColor));
+			cubeColor.clear();
+		}
+
+		genBuffers();
+		load_create_texture();
+	}
+	void draw();
+	void updateCurrentPart(char);
+	void updateParts(char);
+	void fillShuffle(char);
+	void move(char);
+	void solve(vector<string> sol);
+	void setSolve();
+	void breath();
+	void expand();
+	void twist();
+	void vibrate();
+	void magnet();
+	void deleteBuffers();
+private:
+	void genBuffers();
+	void load_create_texture();
+};
+
 class kRubik {
 	GLFWwindow* window;
 	Shader* shader;
@@ -200,5 +295,4 @@ public:
 private:
 	void genBuffers();
 	void load_create_texture();
-	void fall();
 };

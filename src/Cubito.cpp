@@ -232,6 +232,218 @@ void Cubito::deleteBuffers() {
 }
 
 
+void Rubik::genBuffers() {
+	for (int i = 0; i < cubitos.size(); i++) {
+		cubitos[i].genBuffers();
+	}
+
+	return;
+}
+
+void Rubik::load_create_texture() {
+	for (int i = 0; i < cubitos.size(); i++) {
+		cubitos[i].load_create_texture(shader);
+	}
+
+	return;
+}
+
+void Rubik::draw() {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	for (int i = 0; i < cubitos.size(); i++)
+	{
+		cubitos[i].draw(shader);
+	}
+	for (int i = 0; i < brothers.size(); i++) {
+		if (brothers[i]->drawing) {
+			for (int j = 0; j < brothers[i]->cubitos.size(); j++)
+			{
+				brothers[i]->cubitos[j].draw(shader);
+			}
+
+		}
+	}
+	glfwSwapBuffers(window);
+	glfwPollEvents();
+
+	return;
+}
+
+void Rubik::updateCurrentPart(char p) {             //Actualizamos las posiciones de los cubitos de la capa actual
+	vector<int>* pv = &(parts.find(p)->second);
+	vector<int> temp = (*pv);
+	//here
+	(*pv)[1] = temp[0];
+	(*pv)[3] = temp[1];
+	(*pv)[0] = temp[2];
+	(*pv)[2] = temp[3];
+
+	return;
+}
+
+void Rubik::updateParts(char movedChoosen) {
+
+	vector<int>* pMoved = &(parts.find(movedChoosen)->second); // Side moved
+	vector<char> updateSides; // Sides to update R,D,L,U,F,B
+	vector<vector<int>> updateIndex; // Index to update divided in parts of a side
+
+	switch (movedChoosen) {
+	case 'F':
+		updateSides = vector<char>{ 'U', 'R', 'D', 'L' };
+		updateIndex = vector<vector<int>>{ {2, 3}, {0, 2}, {0, 1}, {1, 3} };
+		break;
+	case 'B':
+		updateSides = vector<char>{ 'U', 'L', 'D', 'R' };
+		updateIndex = vector<vector<int>>{ {1, 0}, {0, 2}, {3, 2}, {1, 3} };
+		break;
+	case 'L':
+		updateSides = vector<char>{ 'U', 'F', 'D', 'B' };
+		updateIndex = vector<vector<int>>{ {0, 2}, {0, 2}, {2, 0}, {1, 3} };
+		break;
+	case 'R':
+		updateSides = vector<char>{ 'U', 'B', 'D', 'F' };
+		updateIndex = vector<vector<int>>{ {3, 1}, {0, 2}, {1, 3}, {1, 3} };
+		break;
+	case 'D':
+		updateSides = vector<char>{ 'F', 'R', 'B', 'L' };
+		updateIndex = vector<vector<int>>{ {2, 3}, {2, 3}, {3, 2}, {3, 2} };
+		break;
+	case 'U':
+		updateSides = vector<char>{ 'B', 'R', 'F', 'L' };
+		updateIndex = vector<vector<int>>{ {1, 0}, {1, 0}, {0, 1}, {0, 1} };
+		break;
+	default:
+		break;
+	}
+
+	updateCurrentPart(movedChoosen);
+	vector<vector<int>> sortedIndex = { {0, 1}, {1, 3}, {2, 3}, {0, 2} }; // Order of indices to be updated
+	vector<int>* side_updating; // Side updating
+
+	for (int i = 0; i < 4; i++) {
+		side_updating = &(parts.find(updateSides[i])->second);
+		for (int j = 0; j < 2; j++) {
+			(*side_updating)[updateIndex[i][j]] = (*pMoved)[sortedIndex[i][j]];
+		}
+	}
+
+	return;
+}
+
+void Rubik::fillShuffle(char sideMove) {
+	if (degrees == -1) {
+		shuffle.push_back(string(1, sideMove));
+		cout << sideMove << " ";
+	}
+	else {
+		string s(1, sideMove);
+		s.push_back('\'');
+		shuffle.push_back(s);
+		cout << s << " ";
+	}
+
+	return;
+}
+
+void Rubik::move(char sideMove) {
+
+	vector<int>* pv = &(parts.find(sideMove)->second);
+	vector<bool> moviendo(8, false);
+
+	glm::vec3 center = (cubitos[(*pv)[3]].center + cubitos[(*pv)[0]].center) / 2.0f; // put center out of forloop
+
+	for (int k = 0; k < 90; k++) {
+
+		glm::vec3 center = (cubitos[(*pv)[3]].center + cubitos[(*pv)[0]].center) / 2.0f;
+
+		for (int j = 0; j < pv->size(); j++) {
+
+			cubitos[(*pv)[j]].move(center, shader, degrees);
+
+			//cubitos[(*pv)[j]].draw(ourShader,cubitos[(*pv)[4]].center);      //Pivot
+			moviendo[(*pv)[j]] = true;
+		}
+
+
+		draw();
+	}
+
+	return;
+}
+
+void Rubik::solve(vector<string> sol) {
+	solution = sol;
+	char sideMoved;
+	degrees = -1.0f;
+	for (int i = 0; i < solution.size(); i++) {
+		if (i > 1) {
+			std::cout << "\nSOLUTION: ";
+			for (int j = i; j < solution.size(); j++) std::cout << solution[j] << " ";
+		}
+		if (solution[i].size() == 1) {
+			sideMoved = solution[i].c_str()[0];
+			move(sideMoved);
+			updateParts(sideMoved);
+		}
+		else if (solution[i].size() == 2) {
+			if (solution[i][1] == '\'') {
+				degrees = 1.0f;
+				sideMoved = solution[i].c_str()[0];
+				move(sideMoved);
+				updateParts(sideMoved);
+				updateParts(sideMoved);
+				updateParts(sideMoved);
+				degrees = -1.0f;
+			}
+			else {
+				sideMoved = solution[i].c_str()[0];
+				move(sideMoved);
+				updateParts(sideMoved);
+				move(sideMoved);
+				updateParts(sideMoved);
+			}
+		}
+	}
+	std::cout << "\n\nSHUFFLE: ";
+
+	return;
+}
+
+void Rubik::setSolve() {
+	vector<string> move = get_solution(to_cube_not(shuffle));
+	cout << "\nSOLUTION: ";
+	for (int i = 0; i < move.size(); i++) cout << move[i] << " ";
+	solve(move);
+	shuffle.clear();
+	"\nSHUFFLE: ";
+
+	return;
+}
+
+void Rubik::twist() {
+	int idx_pivots[6] = { 4,21,12,13,16,10 };
+	glm::vec3 randomPivot = cubitos[idx_pivots[rand() % 6]].center;
+	float growth = 0.0005;
+	for (int i = 0; i < 90; i++) {
+		for (int j = 0; j < cubitos.size(); j++) {
+			cubitos[j].twist(shader, randomPivot, growth);
+		}
+		draw();
+	}
+
+	return;
+}
+
+
+void Rubik::deleteBuffers() {
+	for (int i = 0; i < cubitos.size(); i++)
+	{
+		cubitos[i].deleteBuffers();
+	}
+
+	return;
+}
+
 void kRubik::genBuffers() {
 	for (int i = 0; i < cubitos.size(); i++){
 		cubitos[i].genBuffers();
