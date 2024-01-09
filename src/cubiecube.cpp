@@ -5,26 +5,36 @@ cubiecube_t * get_moveCube()
 {
     static cubiecube_t moveCube[6];
     static int moveCube_initialized = 0;
+    //there are 8 corner for 3x3: cpX[8], coX[8]
+    //there are 12 edge for 3x3: epX[12], eo[12]
+    //defualt cpX[8] = {URF, UFL, ULB, UBR, DFR, DLF, DBL, DRB}; 從右前順時針(字母順序好像給錯) 從上而下
+    //defualt epX[12] = {UR, UF, UL, UB, DR, DF, DL, DB, FR, FL, BL, BR }; 從右順時針 從上下中
+    //上面向左轉(順時針)
     static const corner_t     cpU[8]  = { UBR, URF, UFL, ULB, DFR, DLF, DBL, DRB };
     static const signed char  coU[8]  = { 0, 0, 0, 0, 0, 0, 0, 0 };
     static const edge_t       epU[12] = { UB, UR, UF, UL, DR, DF, DL, DB, FR, FL, BL, BR };
     static const signed char  eoU[12] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+    //右側面向上轉(順時針)
     static const corner_t     cpR[8]  = { DFR, UFL, ULB, URF, DRB, DLF, DBL, UBR };
     static const signed char  coR[8]  = { 2, 0, 0, 1, 1, 0, 0, 2 };
     static const edge_t       epR[12] = { FR, UF, UL, UB, BR, DF, DL, DB, DR, FL, BL, UR };
     static const signed char  eoR[12] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+    //前面順時針轉
     static const corner_t     cpF[8]  = { UFL, DLF, ULB, UBR, URF, DFR, DBL, DRB };
     static const signed char  coF[8]  = { 1, 2, 0, 0, 2, 1, 0, 0 };
     static const edge_t       epF[12] = { UR, FL, UL, UB, DR, FR, DL, DB, UF, DF, BL, BR };
     static const signed char  eoF[12] = { 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0 };
+    //下面向右轉(順時針)
     static const corner_t     cpD[8]  = { URF, UFL, ULB, UBR, DLF, DBL, DRB, DFR };
     static const signed char  coD[8]  = { 0, 0, 0, 0, 0, 0, 0, 0 };
     static const edge_t       epD[12] = { UR, UF, UL, UB, DF, DL, DB, DR, FR, FL, BL, BR };
     static const signed char  eoD[12] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+    //右側面向下轉(順時針)
     static const corner_t     cpL[8]  = { URF, ULB, DBL, UBR, DFR, UFL, DLF, DRB };
     static const signed char  coL[8]  = { 0, 1, 2, 0, 0, 2, 1, 0 };
     static const edge_t       epL[12] = { UR, UF, BL, UB, DR, DF, FL, DB, FR, UL, DL, BR };
     static const signed char  eoL[12] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+    //後面逆時針轉(如果後面面對自己的話順時針轉)
     static const corner_t     cpB[8]  = { URF, UFL, UBR, DRB, DFR, DLF, ULB, DBL };
     static const signed char  coB[8]  = { 0, 0, 1, 2, 0, 0, 2, 1 };
     static const edge_t       epB[12] = { UR, UF, UL, BR, DR, DF, DL, BL, FR, FL, UB, DB };
