@@ -97,6 +97,7 @@ void menu() {
     cout << "\n\t - F -> FRONT(F)" << "\n\t - B -> BACK(B)"<< "\n\t - G -> CHANGE TO CLOCKWISE OR TO ANTICLOCKWISE";
     cout << "\n\t - S -> Solve Cube Automatically";
     cout << "\n\t - 2 -> Change Cube to 2 by 2" << "\n\t - 3 -> Change Cube to 3 by 3";
+    cout << "\nSHUFFLE:";
 
     return;
 }
