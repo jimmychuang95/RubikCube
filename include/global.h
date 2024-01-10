@@ -92,11 +92,11 @@ void load_create_texture(unsigned int &texture, const char* title, bool flip=0) 
 
 void menu() {
     cout << "\t\tWELCOME TO RUBIK CUBE\n";
-    cout << "Keys to move:" << "\n\t - MOUSE -> CAMERA" << "\n\t - UP arrow -> UP(U)"<< "\n\t - DOWN arrow -> DOWN(D)";
+    cout << "Keys to move:" << "\n\t - MOUSE, W, A, D, X -> CAMERA" << "\n\t - UP arrow -> UP(U)"<< "\n\t - DOWN arrow -> DOWN(D)";
     cout << "\n\t - LEFT arrow -> LEFT(L)" << "\n\t - RIGHT arrow -> RIGHT(R)";
-    cout << "\n\t - F -> FRONT(F)" << "\n\t - B -> BACK(B)"<< "\n\t - (Right) SHIFT -> CHANGE TO CLOCKWISE OR TO ANTICLOCKWISE";
-    cout << "\nAnimation: " << "\n\t - R -> BREATH(START ANIMATION)" << "\n\t - S -> SOLVE (SMALL CUBE WILL FALL)";
-    cout << "\nSHUFFLE: ";
+    cout << "\n\t - F -> FRONT(F)" << "\n\t - B -> BACK(B)"<< "\n\t - G -> CHANGE TO CLOCKWISE OR TO ANTICLOCKWISE";
+    cout << "\n\t - S -> Solve Cube Automatically";
+    cout << "\n\t - 2 -> Change Cube to 2 by 2" << "\n\t - 3 -> Change Cube to 3 by 3";
 
     return;
 }
@@ -187,7 +187,7 @@ void manager() {
             krubik.fillShuffle(sideMove);
 						krubik.move(sideMove);
 						isMoving = false;
-            for (int i = 0; krubik.degrees == 1.0f && i < 2; i++) {
+            for (int i = 0; krubik.degrees == 0.9f && i < 2; i++) {
 							krubik.updateParts(sideMove);
 						}
 

@@ -259,7 +259,7 @@ public:
 		shader = _shader;
 		timesTwist = 0;
 		dim = _dim;
-		degrees = -1.0f;
+		degrees = -0.9f;
 		float pos = dim + (dim / 8); // 正向位置
 		float neg = -1 * pos;        // 負向位置
 		glm::vec3 cubePositions[] = {

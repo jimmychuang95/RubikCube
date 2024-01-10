@@ -529,7 +529,7 @@ void kRubik::updateParts(char movedChoosen) {
 }
 
 void kRubik::fillShuffle(char sideMove) {
-	if (degrees == -1) {
+	if (degrees == -0.9f) {
 		shuffle.push_back(string(1, sideMove));
 		cout << sideMove << " ";
 	}
@@ -558,7 +558,7 @@ void kRubik::move(char sideMove) {
 	
 	glm::vec3 center = centers.find(sideMove)->second;
 
-	for (int k = 0; k < 90; k++) {
+	for (int k = 0; k < 100; k++) {
 
 		for (int j = 0; j < 4; j++) {
 
@@ -578,7 +578,7 @@ void kRubik::move(char sideMove) {
 void kRubik::solve(vector<string> sol) {
 	solution = sol;
 	char sideMoved;
-	degrees = -1.0f;
+	degrees = -0.9f;
 	for (int i = 0; i < solution.size(); i++) {
 		if (i > 1) {
 			std::cout << "\nSOLUTION: ";
@@ -591,13 +591,13 @@ void kRubik::solve(vector<string> sol) {
 		}
 		else if (solution[i].size() == 2) {
 			if (solution[i][1] == '\'') {
-				degrees = 1.0f;
+				degrees = 0.9f;
 				sideMoved = solution[i].c_str()[0];
 				move(sideMoved);
 				updateParts(sideMoved);
 				updateParts(sideMoved);
 				updateParts(sideMoved);
-				degrees = -1.0f;
+				degrees = -0.9f;
 			}
 			else {
 				sideMoved = solution[i].c_str()[0];
